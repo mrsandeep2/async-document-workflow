@@ -18,6 +18,7 @@ results_router = APIRouter()  # Separate router to avoid wildcard /{document_id}
 
 ALLOWED_TYPES = {
     "application/pdf", "text/plain", "text/csv", "text/markdown",
+    "application/vnd.ms-excel",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "image/jpeg", "image/png",
