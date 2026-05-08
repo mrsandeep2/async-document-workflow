@@ -6,6 +6,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.config import settings
 from app.core.redis_client import get_async_redis
 from app.models.models import Document, Job, Result, JobStatus
 from app.schemas.schemas import DocumentDetailOut, DocumentListItem, ResultUpdate, ResultOut, SuggestionItem
@@ -65,10 +66,21 @@ async def upload_documents(
         db.add(job)
         await db.flush()
 
-        task = process_document_task.delay(
-            job.id, doc.id, file_path, content_type, file.filename
-        )
-        job.celery_task_id = task.id
+        if settings.USE_CELERY:
+            task = process_document_task.delay(
+                job.id, doc.id, file_path, content_type, file.filename
+            )
+            job.celery_task_id = task.id
+        else:
+            await db.commit()
+            await asyncio.to_thread(
+                process_document_task.run,
+                job.id,
+                doc.id,
+                file_path,
+                content_type,
+                file.filename,
+            )
 
         results.append({"document_id": doc.id, "job_id": job.id, "filename": file.filename})
 
@@ -175,10 +187,21 @@ async def retry_job(document_id: str, db: AsyncSession = Depends(get_db)):
     await db.flush()
 
     # Dispatch exactly ONE task
-    task = process_document_task.delay(
-        job.id, doc.id, doc.file_path, doc.file_type, doc.original_name
-    )
-    job.celery_task_id = task.id
+    if settings.USE_CELERY:
+        task = process_document_task.delay(
+            job.id, doc.id, doc.file_path, doc.file_type, doc.original_name
+        )
+        job.celery_task_id = task.id
+    else:
+        await db.commit()
+        await asyncio.to_thread(
+            process_document_task.run,
+            job.id,
+            doc.id,
+            doc.file_path,
+            doc.file_type,
+            doc.original_name,
+        )
 
     return {"job_id": job.id, "status": "queued"}
 
