@@ -1,6 +1,6 @@
 import asyncio
 import json
-from typing import Optional
+from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,7 +26,7 @@ ALLOWED_TYPES = {
 
 @router.post("/upload", status_code=201)
 async def upload_documents(
-    files: list[UploadFile] = File(...),
+    files: List[UploadFile] = File(...),
     db: AsyncSession = Depends(get_db),
 ):
     if not files:
