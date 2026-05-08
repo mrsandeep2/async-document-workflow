@@ -1,9 +1,18 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.documents import router as documents_router, results_router
+from app.core.database import engine, Base
 
-app = FastAPI(title="Document Processing API", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(title="Document Processing API", version="1.0.0", lifespan=lifespan)
 
 frontend_url = os.getenv("FRONTEND_URL")
 allowed_origins = ["http://localhost:5173", "http://localhost:3000"]
