@@ -135,6 +135,9 @@ export default function DetailPage() {
         {/* Left: Job status + progress */}
         <div className="card">
           <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Processing Status</h2>
+          <p className="text-sm text-muted" style={{ marginBottom: 12 }}>
+            Progress updates stream from the background worker while tasks run.
+          </p>
 
           <div className="flex items-center gap-12 mb-16">
             <span className={`badge badge-${jobStatus}`}>

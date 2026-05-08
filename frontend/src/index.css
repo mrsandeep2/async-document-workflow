@@ -292,6 +292,33 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px;
   font-weight: 600;
 }
+.info-strip {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.info-strip-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a7c6a;
+  font-weight: 600;
+}
+.info-strip-items {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #6d5b45;
+  font-size: 13px;
+}
+.info-strip-items span {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat-card {
   background: #fff;

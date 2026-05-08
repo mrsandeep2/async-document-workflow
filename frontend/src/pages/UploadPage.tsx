@@ -54,7 +54,7 @@ export default function UploadPage() {
     <div className="page">
       <div className="page-header">
         <h1 className="page-title">Upload documents</h1>
-        <p className="page-subtitle">Drop files to extract summaries and structured output.</p>
+        <p className="page-subtitle">Drop files to trigger background processing and structured extraction.</p>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -101,12 +101,12 @@ export default function UploadPage() {
         <div className="card">
           <div className="side-card-title">What you get</div>
           <div className="side-list">
-            <div><strong>Fast summary</strong> with category and key highlights.</div>
-            <div><strong>Structured keywords</strong> for quick filtering.</div>
-            <div><strong>Export-ready results</strong> in JSON or CSV.</div>
+            <div><strong>Metadata</strong> (name, type, size) stored in the database.</div>
+            <div><strong>Structured fields</strong> (title, category, summary, keywords).</div>
+            <div><strong>Export-ready results</strong> in JSON or CSV after review.</div>
           </div>
           <div className="mt-16" style={{ color: '#8a7c6a', fontSize: 13 }}>
-            Tip: keep similar file types together for cleaner comparisons.
+            Tip: upload in batches to compare results side-by-side.
           </div>
         </div>
       </div>

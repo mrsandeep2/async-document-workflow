@@ -87,18 +87,18 @@ export default function DashboardPage() {
     <div className="page">
       <div className="hero">
         <div>
-          <h1 className="hero-title">Document intake, ready for review.</h1>
+          <h1 className="hero-title">Async document processing, ready to review.</h1>
           <p className="hero-subtitle">
-            Centralize documents with live processing updates and instant export-ready summaries.
+            Upload files, track background progress, and review structured results before export.
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary" onClick={() => navigate('/upload')}>+ Upload documents</button>
             <button className="btn btn-secondary" onClick={fetchDocs}>Refresh view</button>
           </div>
           <div className="hero-pills">
-            <span className="pill">Clean exports</span>
-            <span className="pill">Human-readable output</span>
+            <span className="pill">Async processing</span>
             <span className="pill">Live status updates</span>
+            <span className="pill">Review and export</span>
           </div>
         </div>
         <div className="hero-card">
@@ -120,6 +120,17 @@ export default function DashboardPage() {
               <div className="stat-value">{failedCount}</div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="card info-strip">
+        <div className="info-strip-title">Workflow stages</div>
+        <div className="info-strip-items">
+          <span>received</span>
+          <span>parsing</span>
+          <span>extraction</span>
+          <span>stored</span>
+          <span>completed</span>
         </div>
       </div>
 
