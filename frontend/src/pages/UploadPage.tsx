@@ -53,47 +53,61 @@ export default function UploadPage() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1 className="page-title">Upload Documents</h1>
-        <p className="page-subtitle">Upload one or more documents to start async processing</p>
+        <h1 className="page-title">Upload documents</h1>
+        <p className="page-subtitle">Drop files to extract summaries and structured output.</p>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
 
-      <div className="card">
-        <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
-          <input {...getInputProps()} />
-          <div className="dropzone-icon">📂</div>
-          <p className="dropzone-title">
-            {isDragActive ? 'Drop files here' : 'Drag & drop files here, or click to browse'}
-          </p>
-          <p className="dropzone-sub">PDF, TXT, CSV, DOCX, XLSX, JPG, PNG — up to 50MB each</p>
+      <div className="split-layout">
+        <div className="card">
+          <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
+            <input {...getInputProps()} />
+            <div className="dropzone-icon">📂</div>
+            <p className="dropzone-title">
+              {isDragActive ? 'Drop files here' : 'Drag & drop files here, or click to browse'}
+            </p>
+            <p className="dropzone-sub">PDF, TXT, CSV, DOCX, XLSX, JPG, PNG — up to 50MB each</p>
+          </div>
+
+          {files.length > 0 && (
+            <div className="file-list">
+              {files.map((f, i) => (
+                <div key={i} className="file-item">
+                  <div>
+                    <div className="file-item-name">{f.name}</div>
+                    <div className="file-item-size">{formatSize(f.size)}</div>
+                  </div>
+                  <button className="btn btn-sm btn-danger" onClick={() => removeFile(i)}>Remove</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-24 flex gap-12">
+            <button
+              className="btn btn-primary"
+              onClick={handleUpload}
+              disabled={!files.length || uploading}
+            >
+              {uploading ? 'Uploading...' : `Upload ${files.length ? `(${files.length} file${files.length > 1 ? 's' : ''})` : ''}`}
+            </button>
+            {files.length > 0 && (
+              <button className="btn btn-secondary" onClick={() => setFiles([])}>Clear all</button>
+            )}
+          </div>
         </div>
 
-        {files.length > 0 && (
-          <div className="file-list">
-            {files.map((f, i) => (
-              <div key={i} className="file-item">
-                <div>
-                  <div className="file-item-name">{f.name}</div>
-                  <div className="file-item-size">{formatSize(f.size)}</div>
-                </div>
-                <button className="btn btn-sm btn-danger" onClick={() => removeFile(i)}>Remove</button>
-              </div>
-            ))}
+        <div className="card">
+          <div className="side-card-title">What you get</div>
+          <div className="side-list">
+            <div><strong>Fast summary</strong> with category and key highlights.</div>
+            <div><strong>Structured keywords</strong> for quick filtering.</div>
+            <div><strong>Export-ready results</strong> in JSON or CSV.</div>
           </div>
-        )}
-
-        <div className="mt-24 flex gap-12">
-          <button
-            className="btn btn-primary"
-            onClick={handleUpload}
-            disabled={!files.length || uploading}
-          >
-            {uploading ? 'Uploading...' : `Upload ${files.length ? `(${files.length} file${files.length > 1 ? 's' : ''})` : ''}`}
-          </button>
-          {files.length > 0 && (
-            <button className="btn btn-secondary" onClick={() => setFiles([])}>Clear all</button>
-          )}
+          <div className="mt-16" style={{ color: '#8a7c6a', fontSize: 13 }}>
+            Tip: keep similar file types together for cleaner comparisons.
+          </div>
         </div>
       </div>
     </div>

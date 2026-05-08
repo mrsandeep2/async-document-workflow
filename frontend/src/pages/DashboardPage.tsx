@@ -39,6 +39,11 @@ export default function DashboardPage() {
   const [sortDir, setSortDir] = useState('desc')
   const navigate = useNavigate()
 
+  const totalDocs = docs.length
+  const completedCount = docs.filter(doc => doc.status === 'completed').length
+  const processingCount = docs.filter(doc => doc.status === 'processing').length
+  const failedCount = docs.filter(doc => doc.status === 'failed').length
+
   const fetchDocs = useCallback(async () => {
     try {
       const res = await listDocuments({ search, status: statusFilter || undefined, sort_by: sortBy, sort_dir: sortDir })
@@ -80,12 +85,42 @@ export default function DashboardPage() {
 
   return (
     <div className="page">
-      <div className="page-header flex justify-between items-center">
+      <div className="hero">
         <div>
-          <h1 className="page-title">Documents</h1>
-          <p className="page-subtitle">{docs.length} document{docs.length !== 1 ? 's' : ''}</p>
+          <h1 className="hero-title">Document intake, ready for review.</h1>
+          <p className="hero-subtitle">
+            Centralize documents with live processing updates and instant export-ready summaries.
+          </p>
+          <div className="hero-actions">
+            <button className="btn btn-primary" onClick={() => navigate('/upload')}>+ Upload documents</button>
+            <button className="btn btn-secondary" onClick={fetchDocs}>Refresh view</button>
+          </div>
+          <div className="hero-pills">
+            <span className="pill">Clean exports</span>
+            <span className="pill">Human-readable output</span>
+            <span className="pill">Live status updates</span>
+          </div>
         </div>
-        <button className="btn btn-primary" onClick={() => navigate('/upload')}>+ Upload</button>
+        <div className="hero-card">
+          <div className="stat-grid">
+            <div className="stat-card">
+              <div className="stat-label">Total files</div>
+              <div className="stat-value">{totalDocs}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Completed</div>
+              <div className="stat-value">{completedCount}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">In progress</div>
+              <div className="stat-value">{processingCount}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Needs review</div>
+              <div className="stat-value">{failedCount}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="filter-bar">
